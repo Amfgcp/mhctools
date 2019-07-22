@@ -26,7 +26,7 @@ class NetMHCpan4(BaseCommandlinePredictor):
             process_limit=-1,
             extra_flags=[]):
 
-        # The -BA flag is required to predict binding affinity
+        # -BA flag is required if binding affinity is to be predicted
         BaseCommandlinePredictor.__init__(
             self,
             program_name=program_name,
@@ -37,5 +37,5 @@ class NetMHCpan4(BaseCommandlinePredictor):
             input_file_flag="-f",
             length_flag="-l",
             allele_flag="-a",
-            extra_flags=["-BA"] + extra_flags,
+            extra_flags=extra_flags,
             process_limit=process_limit)

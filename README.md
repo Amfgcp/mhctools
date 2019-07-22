@@ -8,6 +8,7 @@
 
 # mhctools
 Python interface to running command-line and web-based MHC binding predictors.
+This fork more faithfully mimics the default behavior of netMHCpan4: by default it is run without the "-BA" flag which results in different values for the "%Rank" column, hence possibly changing the strong and weak binders classification.
 
 ## Commandline examples
 

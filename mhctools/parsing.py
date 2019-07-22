@@ -133,7 +133,7 @@ def parse_stdout(
         offset = int(fields[offset_index])
         peptide = str(fields[peptide_index])
         allele = str(fields[allele_index])
-        ic50 = float(fields[ic50_index])
+        ic50 = float(fields[ic50_index]) if ic50_index else 0.0
         rank = float(fields[rank_index]) if rank_index else 0.0
         log_ic50 = float(fields[log_ic50_index])
 
@@ -317,6 +317,25 @@ def parse_netmhcpan4_stdout(
     Protein PEPLIST. Allele HLA-A*02:01. Number of high binders 0. Number of weak binders 0. Number of peptides 1
     """
 
+    # In case the user did not specify for affinity prediction ("-BA" flag)
+    if "-BA" not in stdout.split("\n")[0].split(" "):
+        # the offset specified in "pos" (at index 0) is 1-based instead of 0-based. we adjust it to be
+        # 0-based, as in all the other netmhc predictors supported by this library.
+        transforms = {
+            0: lambda x: int(x) - 1,
+        }
+        return parse_stdout(
+            stdout=stdout,
+            prediction_method_name=prediction_method_name,
+            sequence_key_mapping=sequence_key_mapping,
+            key_index=10,
+            offset_index=0,
+            peptide_index=2,
+            allele_index=1,
+            ic50_index=None,
+            rank_index=12,
+            log_ic50_index=11,
+            transforms=transforms)
     # Output format is compatible with netmhcpan3, but netmhcpan 4.0 must be
     # called with the -BA flag, so it gives affinity predictions, not mass-spec
     # elution likelihoods.
